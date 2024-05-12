@@ -122,7 +122,7 @@ struct _NO_DISCARD_ Vector3 {
 
 	Vector3 move_toward(const Vector3 &p_to, real_t p_delta) const;
 
-	//Vector3 SmoothDamp(Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, [uei.DefaultValue("Mathf.Infinity")]  float maxSpeed, [uei.DefaultValue("Time.deltaTime")]  float deltaTime)
+	Vector3 smooth_damp(const Vector3 &p_current, const Vector3 &p_target, Vector3 &currentVelocity, float smoothTime, float maxSpeed, real_t deltaTime) const;
 
 	Vector2 octahedron_encode() const;
 	static Vector3 octahedron_decode(const Vector2 &p_oct);
