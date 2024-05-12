@@ -101,60 +101,59 @@ Vector3 Vector3::move_toward(const Vector3 &p_to, real_t p_delta) const {
 	return len <= p_delta || len < (real_t)CMP_EPSILON ? p_to : v + vd / len * p_delta;
 }
 
-/*public static Vector3 SmoothDamp(Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, [uei.DefaultValue("Mathf.Infinity")]  float maxSpeed, [uei.DefaultValue("Time.deltaTime")]  float deltaTime)
-        {
-            float output_x = 0f;
-            float output_y = 0f;
-            float output_z = 0f;
+Vector3 Vector3::smooth_damp(const Vector3 &p_current, const Vector3 &p_target, Vector3 &currentVelocity, float smoothTime, float maxSpeed, real_t p_delta) const {
+            real_t output_x = 0;
+            real_t output_y = 0;
+            real_t output_z = 0;
 
             // Based on Game Programming Gems 4 Chapter 1.10
-            smoothTime = Mathf.Max(0.0001F, smoothTime);
-            float omega = 2F / smoothTime;
+            smoothTime = MAX(0.0001F, smoothTime);
+            real_t omega = 2 / smoothTime;
 
-            float x = omega * deltaTime;
-            float exp = 1F / (1F + x + 0.48F * x * x + 0.235F * x * x * x);
+            real_t x = omega * p_delta;
+            real_t exp = 1 / (1 + x + 0.48F * x * x + 0.235F * x * x * x);
 
-            float change_x = current.x - target.x;
-            float change_y = current.y - target.y;
-            float change_z = current.z - target.z;
-            Vector3 originalTo = target;
+            real_t change_x = p_current.x - p_target.x;
+            real_t change_y = p_current.y - p_target.y;
+            real_t change_z = p_current.z - p_target.z;
+            Vector3 originalTo = p_target;
 
             // Clamp maximum speed
-            float maxChange = maxSpeed * smoothTime;
+            real_t maxChange = maxSpeed * smoothTime;
 
-            float maxChangeSq = maxChange * maxChange;
-            float sqrmag = change_x * change_x + change_y * change_y + change_z * change_z;
+            real_t maxChangeSq = maxChange * maxChange;
+            real_t sqrmag = change_x * change_x + change_y * change_y + change_z * change_z;
             if (sqrmag > maxChangeSq)
             {
-                var mag = (float)Math.Sqrt(sqrmag);
+                real_t mag = Math::sqrt(sqrmag);
                 change_x = change_x / mag * maxChange;
                 change_y = change_y / mag * maxChange;
                 change_z = change_z / mag * maxChange;
             }
 
-            target.x = current.x - change_x;
-            target.y = current.y - change_y;
-            target.z = current.z - change_z;
+            p_target.x = p_current.x - change_x;
+            p_target.y = p_current.y - change_y;
+            p_target.z = p_current.z - change_z;
 
-            float temp_x = (currentVelocity.x + omega * change_x) * deltaTime;
-            float temp_y = (currentVelocity.y + omega * change_y) * deltaTime;
-            float temp_z = (currentVelocity.z + omega * change_z) * deltaTime;
+            real_t temp_x = (currentVelocity.x + omega * change_x) * p_delta;
+            real_t temp_y = (currentVelocity.y + omega * change_y) * p_delta;
+            real_t temp_z = (currentVelocity.z + omega * change_z) * p_delta;
 
             currentVelocity.x = (currentVelocity.x - omega * temp_x) * exp;
             currentVelocity.y = (currentVelocity.y - omega * temp_y) * exp;
             currentVelocity.z = (currentVelocity.z - omega * temp_z) * exp;
 
-            output_x = target.x + (change_x + temp_x) * exp;
-            output_y = target.y + (change_y + temp_y) * exp;
-            output_z = target.z + (change_z + temp_z) * exp;
+            output_x = p_target.x + (change_x + temp_x) * exp;
+            output_y = p_target.y + (change_y + temp_y) * exp;
+            output_z = p_target.z + (change_z + temp_z) * exp;
 
             // Prevent overshooting
-            float origMinusCurrent_x = originalTo.x - current.x;
-            float origMinusCurrent_y = originalTo.y - current.y;
-            float origMinusCurrent_z = originalTo.z - current.z;
-            float outMinusOrig_x = output_x - originalTo.x;
-            float outMinusOrig_y = output_y - originalTo.y;
-            float outMinusOrig_z = output_z - originalTo.z;
+            real_t origMinusCurrent_x = originalTo.x - p_current.x;
+            real_t origMinusCurrent_y = originalTo.y - p_current.y;
+            real_t origMinusCurrent_z = originalTo.z - p_current.z;
+            real_t outMinusOrig_x = output_x - originalTo.x;
+            real_t outMinusOrig_y = output_y - originalTo.y;
+            real_t outMinusOrig_z = output_z - originalTo.z;
 
             if (origMinusCurrent_x * outMinusOrig_x + origMinusCurrent_y * outMinusOrig_y + origMinusCurrent_z * outMinusOrig_z > 0)
             {
@@ -162,13 +161,13 @@ Vector3 Vector3::move_toward(const Vector3 &p_to, real_t p_delta) const {
                 output_y = originalTo.y;
                 output_z = originalTo.z;
 
-                currentVelocity.x = (output_x - originalTo.x) / deltaTime;
-                currentVelocity.y = (output_y - originalTo.y) / deltaTime;
-                currentVelocity.z = (output_z - originalTo.z) / deltaTime;
+                currentVelocity.x = (output_x - originalTo.x) / p_delta;
+                currentVelocity.y = (output_y - originalTo.y) / p_delta;
+                currentVelocity.z = (output_z - originalTo.z) / p_delta;
             }
 
-            return new Vector3(output_x, output_y, output_z);
-        }*/
+            return Vector3(output_x, output_y, output_z);
+        }
 
 Vector2 Vector3::octahedron_encode() const {
 	Vector3 n = *this;
