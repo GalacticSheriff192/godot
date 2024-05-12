@@ -101,7 +101,7 @@ Vector3 Vector3::move_toward(const Vector3 &p_to, real_t p_delta) const {
 	return len <= p_delta || len < (real_t)CMP_EPSILON ? p_to : v + vd / len * p_delta;
 }
 
-Vector3 Vector3::smooth_damp(const Vector3 &p_current, const Vector3 &p_target, Vector3 &currentVelocity, float smoothTime, float maxSpeed, real_t p_delta) const {
+Vector3 Vector3::smooth_damp(Vector3 &p_current, Vector3 &p_target, Vector3 &currentVelocity, float smoothTime, float maxSpeed, real_t p_delta) {
             real_t output_x = 0;
             real_t output_y = 0;
             real_t output_z = 0;
